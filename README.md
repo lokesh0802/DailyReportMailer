@@ -11,9 +11,10 @@ A simple automation script to send daily reports via email.
    npm install
    nodemon server.js
    ```
+   ⚠ **Note:** The `apiserver` provided is a trial API made for testing purposes. You should use your own API when configuring `report-mailer`.
 
 ### **Step 2: Configure Email Settings**
-- Modify `config.py` to:
+- Modify `config.py` in `report-mailer` to:
   - Set the **sender email**.
   - Set the **receiver email**.
   - Configure the **API endpoint** for email dispatch.
@@ -24,7 +25,4 @@ A simple automation script to send daily reports via email.
    ```sh
    pip install -r requirements.txt
    python main.py
-   ```
-
----
-
+   

@@ -1,30 +1,96 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Daily Report</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sales Report</title>
     <style>
-        body { font-family: Arial, sans-serif; }
-        table { width: 100%; border-collapse: collapse; }
-        th, td { border: 1px solid #ddd; padding: 8px; }
+        body { 
+            font-family: Arial, sans-serif; 
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        h1, h2 { color: #333; }
+        table { 
+            width: 100%; 
+            border-collapse: collapse; 
+            margin-bottom: 20px;
+        }
+        th, td { 
+            border: 1px solid #ddd; 
+            padding: 8px; 
+            text-align: left;
+        }
         th { background-color: #f2f2f2; }
+        .summary-box {
+            background-color: #f9f9f9;
+            border: 1px solid #ddd;
+            padding: 15px;
+            margin-bottom: 20px;
+        }
+        .summary-item {
+            display: inline-block;
+            margin-right: 20px;
+        }
     </style>
 </head>
 <body>
-    <h2>Daily Report</h2>
-    <p>Here is the summary of today's data:</p>
+    <h1>Sales Report - {{ data.report_date }}</h1>
+    <h2>{{ data.business_name }}</h2>
+    <p><strong>Owner:</strong> {{ data.owner_name }}</p>
+    <p><strong>Address:</strong> {{ data.address }}</p>
+    <p><strong>Email:</strong> {{ data.email }}</p>
+
+    <h2>End of Day Summary</h2>
+    <div class="summary-box">
+        <div class="summary-item">
+            <strong>Total Sales:</strong> ₹{{ data.total_sales }}
+        </div>
+        <div class="summary-item">
+            <strong>Number of Invoices:</strong> {{ data.num_invoices }}
+        </div>
+        <div class="summary-item">
+            <strong>Appointments:</strong> {{ data.num_appointments }}
+        </div>
+    </div>
+
+    <h2>Report Summary</h2>
+
+    <h3>Sales By Payment Method</h3>
     <table>
         <tr>
-            <th>Client</th>
-            <th>Metric 1</th>
-            <th>Metric 2</th>
+            <th>Payment Method</th>
+            <th>Total Sales (₹)</th>
         </tr>
-        {% for entry in data %}
+        {% for method, sales in data.payment_methods.items() %}
         <tr>
-            <td>{{ entry.client }}</td>
-            <td>{{ entry.metric1 }}</td>
-            <td>{{ entry.metric2 }}</td>
+            <td>{{ method }}</td>
+            <td>₹{{ sales }}</td>
         </tr>
         {% endfor %}
+        <tr>
+            <th>Grand Total</th>
+            <th>₹{{ data.total_sales }}</th>
+        </tr>
+    </table>
+
+    <h3>Sales by Category</h3>
+    <table>
+        <tr>
+            <th>Category</th>
+            <th>Total Sales (₹)</th>
+        </tr>
+        {% for category, sales in data.sales_by_category.items() %}
+        <tr>
+            <td>{{ category }}</td>
+            <td>₹{{ sales }}</td>
+        </tr>
+        {% endfor %}
+        <tr>
+            <th>Grand Total</th>
+            <th>₹{{ data.total_sales }}</th>
+        </tr>
     </table>
 </body>
 </html>
