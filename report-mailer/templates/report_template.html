@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Daily Report</title>
+    <style>
+        body { font-family: Arial, sans-serif; }
+        table { width: 100%; border-collapse: collapse; }
+        th, td { border: 1px solid #ddd; padding: 8px; }
+        th { background-color: #f2f2f2; }
+    </style>
+</head>
+<body>
+    <h2>Daily Report</h2>
+    <p>Here is the summary of today's data:</p>
+    <table>
+        <tr>
+            <th>Client</th>
+            <th>Metric 1</th>
+            <th>Metric 2</th>
+        </tr>
+        {% for entry in data %}
+        <tr>
+            <td>{{ entry.client }}</td>
+            <td>{{ entry.metric1 }}</td>
+            <td>{{ entry.metric2 }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+</body>
+</html>
