@@ -17,8 +17,8 @@ def verify_smtp_connection():
         return False, """
         Gmail authentication failed. Please verify:
         1. Environment variables are set correctly:
-           - GMAIL_USER
-           - GMAIL_APP_PASSWORD
+           - EMAIL_USER
+           - EMAIL_APP_PASSWORD
         2. You're using an App Password, not your regular Gmail password
         3. The App Password is typed correctly (16 characters)
         4. 2-Step Verification is enabled for your Google Account
@@ -85,8 +85,8 @@ def send_email_report(email_reports):
         print("""
         Gmail authentication failed!
         Please check your environment variables:
-        1. GMAIL_USER should be your full Gmail address
-        2. GMAIL_APP_PASSWORD should be a 16-character App Password
+        1. EMAIL_USER should be your full Gmail address
+        2. EMAIL_APP_PASSWORD should be a 16-character App Password
            (Not your regular Gmail password)
         
         To generate an App Password:

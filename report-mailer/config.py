@@ -1,34 +1,103 @@
+# import os
+# from dotenv import load_dotenv
+# from pathlib import Path
+
+# env_path = Path(__file__).parent.parent / '.env'
+# print(f"Looking for .env file at: {env_path.absolute()}")
+# load_dotenv(env_path)
+
+# print(f"Loaded EMAIL_USER: {os.getenv('EMAIL_USER')}")
+# print(f"EMAIL_APP_PASSWORD loaded: {'Yes' if os.getenv('EMAIL_APP_PASSWORD') else 'No'}")
+
+# API_URL = os.getenv('API_URL')  
+
+
+# SMTP_SERVER = "smtp.gmail.com"
+# SMTP_PORT = 587
+
+# SENDER_EMAIL = os.getenv('EMAIL_USER')
+# SENDER_PASSWORD = os.getenv('EMAIL_APP_PASSWORD')
+
+# if not SENDER_EMAIL or not SENDER_PASSWORD:
+#     raise ValueError("""
+#     Please create a .env file in the project root with the following variables:
+    
+#     EMAIL_USER=your.email@gmail.com
+#     EMAIL_APP_PASSWORD=your16charpassword
+    
+#     To get an App Password:
+#     1. Go to your Google Account settings
+#     2. Enable 2-Step Verification if not already enabled
+#     3. Go to Security → App Passwords
+#     4. Select 'Mail' and generate a new app password
+#     5. Copy the 16-character password without spaces
+#     """)
 import os
 from dotenv import load_dotenv
 from pathlib import Path
+from typing import Tuple, Optional
 
+# Load environment variables from .env file
 env_path = Path(__file__).parent.parent / '.env'
-print(f"Looking for .env file at: {env_path.absolute()}")
+if not env_path.exists():
+    raise FileNotFoundError(f"Environment file not found at: {env_path.absolute()}")
+
 load_dotenv(env_path)
 
-print(f"Loaded GMAIL_USER: {os.getenv('GMAIL_USER')}")
-print(f"GMAIL_APP_PASSWORD loaded: {'Yes' if os.getenv('GMAIL_APP_PASSWORD') else 'No'}")
+def mask_email(email: str) -> str:
+    """Mask email address for secure logging."""
+    if not email or '@' not in email:
+        return ''
+    username, domain = email.split('@')
+    masked_username = username[:3] + '*' * (len(username) - 3)
+    return f"{masked_username}@{domain}"
 
-API_URL = os.getenv('API_URL')  
+def get_smtp_config(email: str) -> Tuple[Optional[str], Optional[int]]:
+    """Get SMTP configuration based on email domain."""
+    if not email or '@' not in email:
+        return None, None
+    
+    SMTP_SERVERS = {
+        "gmail.com": ("smtp.gmail.com", 587),
+        "outlook.com": ("smtp.office365.com", 587),
+        "hotmail.com": ("smtp.office365.com", 587),
+        "yahoo.com": ("smtp.mail.yahoo.com", 465),
+        "zoho.com": ("smtp.zoho.com", 465),
+        "bennett.edu.in": ("smtp.office365.com", 587),
+    }
+    
+    domain = email.split("@")[-1].lower()
+    return SMTP_SERVERS.get(domain, (None, None))
 
+# Configuration
+API_URL = "http://localhost:3000/data"
+SENDER_EMAIL = os.getenv('EMAIL_USER')
+SENDER_PASSWORD = os.getenv('EMAIL_APP_PASSWORD')
 
-SMTP_SERVER = "smtp.gmail.com"
-SMTP_PORT = 587
+# Debug logging with masked email
+print(f"Config initialized with email: {mask_email(SENDER_EMAIL)}")
 
-SENDER_EMAIL = os.getenv('GMAIL_USER')
-SENDER_PASSWORD = os.getenv('GMAIL_APP_PASSWORD')
+# Get SMTP configuration
+SMTP_SERVER, SMTP_PORT = get_smtp_config(SENDER_EMAIL)
 
-if not SENDER_EMAIL or not SENDER_PASSWORD:
+if not all([SENDER_EMAIL, SENDER_PASSWORD, SMTP_SERVER, SMTP_PORT]):
     raise ValueError("""
-    Please create a .env file in the project root with the following variables:
+    Missing or invalid configuration. Please ensure:
+    1. .env file exists in project root
+    2. EMAIL_USER and EMAIL_APP_PASSWORD are set
+    3. Email domain is supported
     
-    GMAIL_USER=your.email@gmail.com
-    GMAIL_APP_PASSWORD=your16charpassword
+    Supported email providers:
+    - Gmail (@gmail.com)
+    - Outlook/Hotmail (@outlook.com, @hotmail.com)
+    - Yahoo (@yahoo.com)
+    - Zoho (@zoho.com)
+    - Bennett University (@bennett.edu.in)
     
-    To get an App Password:
-    1. Go to your Google Account settings
-    2. Enable 2-Step Verification if not already enabled
-    3. Go to Security → App Passwords
-    4. Select 'Mail' and generate a new app password
-    5. Copy the 16-character password without spaces
+    For Gmail setup:
+    1. Enable 2-Step Verification in Google Account
+    2. Generate App Password: Security → App Passwords
+    3. Use the 16-character password in .env file
     """)
+
+print(f"SMTP Configuration: {SMTP_SERVER}:{SMTP_PORT}")
