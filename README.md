@@ -11,7 +11,9 @@ A simple automation script to send daily reports via email.
    npm install
    nodemon server.js
    ```
+3. Open the `apiserver\server.js` ![alt text](image.png) add your email to get report 
    ⚠ **Note:** The `apiserver` provided is a trial API made for testing purposes. You should use your own API when configuring `report-mailer`.
+
 
 ### **Step 2: Configure Email Settings**
 - Modify `.env ` in `report-mailer` to:
