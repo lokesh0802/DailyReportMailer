@@ -14,9 +14,16 @@ A simple automation script to send daily reports via email.
    ⚠ **Note:** The `apiserver` provided is a trial API made for testing purposes. You should use your own API when configuring `report-mailer`.
 
 ### **Step 2: Configure Email Settings**
-- Modify `config.py` in `report-mailer` to:
-  - Set the **sender email**.
-  - Set the **receiver email**.
+- Modify `.env ` in `report-mailer` to:
+  - Set the **GMAIL USER**.#from which email you want to send reports to the client 
+  -Set the **GMAIL APP PASSWORD**.
+      To get an App Password:
+         1. Go to your Google Account settings (from which you want to send the reports to the client)
+         2. Enable 2-Step Verification if not already enabled
+         3. https://support.google.com/accounts/answer/185833?hl=en     go on this url 
+         4. Click on **Create and manage your app passwords**  after login in you will reach here ![alt text](2.png)
+         5. Write your App name and Click on **Create** you will get this ![alt text](image-1.png) which is app password 
+    
   - Configure the **API endpoint** for email dispatch.
 
 ### **Step 3: Run the Report Mailer**
